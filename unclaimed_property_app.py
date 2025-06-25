@@ -146,9 +146,12 @@ def build_database(csv_buffers: List[io.StringIO]):
     conn.close()
 
 def sync():
-    zip_bytes = download_zip(ALL_FILE)
-    buf = extract_csv_from_zip(zip_bytes)
-    build_database([buf])
+    csv_buffers = []
+    for fname in TIERS:
+        zip_bytes = download_zip(fname)
+        buf = extract_csv_from_zip(zip_bytes)
+        csv_buffers.append(buf)
+    build_database(csv_buffers)
     print("[sync] Complete – DB ready →", DB_PATH)
 
 # ---------------------------------------------------------------------------
